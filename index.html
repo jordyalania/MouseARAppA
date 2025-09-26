@@ -38,7 +38,7 @@
 
     <video id="webcam-video" muted autoplay playsinline style="width:1px;position:absolute"></video>
     <!-- <video id="webcam-video" muted autoplay playsinline style="width:100%; height:100%; object-fit:cover; position:absolute"></video> -->
-    <canvas id="video-canvas" style="width:100%; height:100%; object-fit:cover; position:absolute"></canvas>
+    <canvas id="video-canvas" style="width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; z-index:0"></canvas>
     <div id="startARDiv" class="ctaDiv">
         <select id="chooseCamSel" style="display: none;" onchange="SelectCam()"></select>
         <p style="text-align: center; width:60vw;">This augmented reality experience requires access to your device's camera</p>
@@ -64,7 +64,7 @@
         <p id="errorText" style="text-align: center; width:60vw; color:white"></p>
     </div>
     <div id="unity-container" class="unity-mobile">
-        <canvas id="unity-canvas" style="width: 100%; height: 100%; background: #0000; z-index: -99"></canvas>
+        <canvas id="unity-canvas" style="width: 100%; height: 100%; background: #0000; position:absolute; top:0; left:0; z-index: 10"></canvas>
         <div id="unity-loading-bar">
             <div id="unity-logo"></div>
             <div id="unity-progress-bar-empty">
@@ -151,12 +151,12 @@
                 try{
                     window.webcamStream = await navigator.mediaDevices.getUserMedia(window.WEBCAM_SETTINGS);
                     console.log("Webcam access granted");
-                    requestingForPermissions = false;
+                    window.requestingForPermissions = false;
                     onWebcamAccessGranted();
                 }
                 catch (err) {
                     //user denied camera permission - show error panel
-                    console.error("getUserMedia error - " , err);
+                    console.error("getUserMedia error - ", err);
                     ShowError("Failed to start the experience. Camera permission was denied");
                     window.requestingForPermissions = false;
                 }           
@@ -172,7 +172,7 @@
                 if(window.webcamStream)
                 {
                     const video = document.querySelector("#webcam-video");
-                    video.srcObject = webcamStream;
+                    video.srcObject = window.webcamStream;
                     try {
                         await arCamera.startWebcam(video);
                         console.log("Webcam started successfully");
