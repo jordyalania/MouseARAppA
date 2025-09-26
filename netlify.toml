@@ -1,0 +1,33 @@
+[build]
+  publish = "."
+
+# Global security headers for cross-origin isolation (required for some Unity/WebGL features)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cross-Origin-Opener-Policy = "same-origin"
+    Cross-Origin-Embedder-Policy = "require-corp"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Ensure correct content-type and long-term caching for wasm and static build assets
+[[headers]]
+  for = "/Build/*.wasm"
+  [headers.values]
+    Content-Type = "application/wasm"
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/Build/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/TemplateData/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/opencv.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
